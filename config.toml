@@ -82,7 +82,7 @@ disqusShortname = "yourdiscussshortname"
     url = "images/wechat.jpg"
 
 
-
+[languages]
     [languages.en]
         languagename = "English"
 
