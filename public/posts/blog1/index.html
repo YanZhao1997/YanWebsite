@@ -156,8 +156,8 @@ head(world)</code></pre>
 plot1</code></pre>
 <p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
-<div id="now-on-the-map-we-using-data-from-the-nasaweather-packages-and-the-geom_path-function-to-add-the-path-of-tropical-storms-in-the-storms-data-table.here-i-use-guidescolorfalse-to-remove-the-legend-with-the-names-of-the-storms-because-there-are-so-many-storms-in-the-data-set.-if-i-show-the-legend-it-will-be-very-messy.-the-outcome-is-called-plot2." class="section level3">
-<h3>Now, on the map, we using data from the nasaweather packages and the geom_path() function to add the path of tropical storms in the storms data table.Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.</h3>
+<div id="now-on-the-map-we-use-data-from-the-nasaweather-packages-and-the-geom_path-function-to-add-the-path-of-tropical-storms.-here-i-use-guidescolorfalse-to-remove-the-legend-with-the-names-of-the-storms-because-there-are-so-many-storms-in-the-data-set.-if-i-show-the-legend-it-will-be-very-messy.-the-outcome-is-called-plot2." class="section level3">
+<h3>Now, on the map, we use data from the nasaweather packages and the geom_path() function to add the path of tropical storms. Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.</h3>
 <pre class="r"><code>plot2&lt;-plot1+
   geom_path(data=nasaweather::storms,aes(x=long,y=lat,color=name))+
   guides(color=FALSE)+
@@ -186,8 +186,8 @@ plot4</code></pre>
 </div>
 <div id="us-plots" class="section level2">
 <h2>US Plots</h2>
-<div id="as-world-map-plots-we-use-the-same-function-to-plot-the-map-of-the-us." class="section level3">
-<h3>As world map plots, we use the same function to plot the map of the US.</h3>
+<div id="as-same-as-world-map-plots-we-use-the-same-function-to-plot-the-map-of-the-us." class="section level3">
+<h3>As same as world map plots, we use the same function to plot the map of the US.</h3>
 <pre class="r"><code>us&lt;-map_data(&quot;state&quot;)
 plot5&lt;-ggplot() +
   geom_polygon(data=us, aes(long, lat, group = group),fill = &quot;pink&quot;, color = &quot;white&quot;)+

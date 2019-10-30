@@ -34,7 +34,7 @@ plot1<-ggplot() +
 plot1
 ```
 
-### Now, on the map, we using data from the nasaweather packages and the geom_path() function to add the path of tropical storms in the storms data table.Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.
+### Now, on the map, we use data from the nasaweather packages and the geom_path() function to add the path of tropical storms. Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.
 
 ```{r}
 plot2<-plot1+
@@ -66,7 +66,7 @@ plot4
 
 ## US Plots
 
-### As world map plots, we use the same function to plot the map of the US.
+### As same as world map plots, we use the same function to plot the map of the US.
 
 
 ```{r}
