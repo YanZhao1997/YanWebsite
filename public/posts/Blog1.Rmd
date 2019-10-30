@@ -1,0 +1,100 @@
+---
+title: How to Plot Maps and Paths in R
+---
+
+### This blog is mainly about how to plot maps and paths using "ggplot2" and "maps". We use the dataset in nasaweather package as examples. First example is to plot the world map and the paths of tropical storms. The second example is to plot the US map and the path of tropical storm Erin. 
+
+### The packages we use to plot the map are "maps" and ggplot2". To process the data, we use package called "tidyverse"
+```{r message=FALSE, warning=FALSE}
+library(maps)
+library(ggplot2)
+library(tidyverse)
+```
+
+
+### The map datas are contained in the maps package and we can use function map_data() to get them. To have more details of map_data(), please click [here](https://www.rdocumentation.org/packages/ggplot2/versions/3.2.1/topics/map_data). The head of world map data and US map data are showed below.
+
+```{r}
+world<-map_data("world")
+us<-map_data("state")
+head(world)
+head(us)
+```
+
+
+
+## World Map Plots
+
+### We can use ggplot()+geom_polygon() to plot the world map. To have more details of geom_polygon(), please click [here](https://ggplot2.tidyverse.org/reference/geom_polygon.html). Here I set "color" as "white", which makes the bounders white and set "fill" as "pink", which makes the area within the bounders pink. I also use labs() to add the title and change the name of axis. The outcome is called plot1.
+
+```{r}
+plot1<-ggplot() +
+  geom_polygon(data=world, aes(long, lat, group = group),fill = "pink", color = "white")+
+  labs(title="Plot1: The world map",x="Longitude",y="Latitude")
+plot1
+```
+
+### Now, on the map, we using data from the nasaweather packages and the geom_path() function to add the path of tropical storms in the storms data table.Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.
+
+```{r}
+plot2<-plot1+
+  geom_path(data=nasaweather::storms,aes(x=long,y=lat,color=name))+
+  guides(color=FALSE)+
+  labs(title="Plot2: The paths of tropical storms on world map",x="Longitude",y="Latitude")+
+  coord_quickmap()
+plot2
+
+```
+
+### It is obvious that the paths gather at a specific area around the US. We can change the range of x-axis and y-axis to have a closer look. The outcome is called plot3. 
+
+```{r}
+plot3<-plot2+
+xlim(-150,10)+
+  ylim(0,75)+
+  labs(title="Plot3: The paths of tropical \n storms in specific area",x="Longitude",y="Latitude")
+plot3
+```
+
+### Also, we can use +facet_wrap() to plot each year in its own panel.
+```{r}
+plot4<-plot3+
+  facet_wrap(~year,ncol=3)+ 
+  labs(title="Plot4: The paths of tropical storms by years",x="Longitude",y="Latitude")
+plot4
+```
+
+## US Plots
+
+### As world map plots, we use the same function to plot the map of the US.
+
+
+```{r}
+us<-map_data("state")
+plot5<-ggplot() +
+  geom_polygon(data=us, aes(long, lat, group = group),fill = "pink", color = "white")+
+  labs(title="Plot5: The US map",x="Longitude",y="Latitude")
+plot5
+```
+
+### Now we just have a look on one storm "Erin", and use geom_path to plot its path.
+
+```{r}
+Erin<-nasaweather::storms%>%filter(name=="Erin")
+plot6<-plot5+  
+  geom_path(data=Erin,aes(x=long,y=lat),size=2)+
+  labs(title="Plot6: The path of tropical storm Erin",x="Longitude",y="Latitude")+
+  coord_quickmap()
+plot6
+```
+
+### Besides that we can color the path of the storm by the wind speed at each point
+
+```{r}
+plot7<-plot5+  
+  geom_path(data=Erin,aes(x=long,y=lat,color=wind),size=2)+
+  labs(title="Plot7: The path of tropical storm Erin",x="Longitude",y="Latitude",color="Wind speed (in knots)")+
+  coord_quickmap()
+plot7
+```
+

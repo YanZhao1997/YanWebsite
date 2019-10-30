@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Yan Zhao">
+    <meta name="description" content="Yan Zhao&#39;s personal website">
+    <meta name="keywords" content="None">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to Plot Maps and Paths in R"/>
+<meta name="twitter:description" content="This blog is mainly about how to plot maps and paths using “ggplot2” and “maps”. We use the dataset in nasaweather package as examples. First example is to plot the world map and the paths of tropical storms. The second example is to plot the US map and the path of tropical storm Erin.The packages we use to plot the map are “maps” and ggplot2“. To process the data, we use package called”tidyverse&#34;"/>
+
+    <meta property="og:title" content="How to Plot Maps and Paths in R" />
+<meta property="og:description" content="This blog is mainly about how to plot maps and paths using “ggplot2” and “maps”. We use the dataset in nasaweather package as examples. First example is to plot the world map and the paths of tropical storms. The second example is to plot the US map and the path of tropical storm Erin.The packages we use to plot the map are “maps” and ggplot2“. To process the data, we use package called”tidyverse&#34;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/blog1/" />
+
+
+
+    
+      <base href="/posts/blog1/">
+    
+    <title>
+  How to Plot Maps and Paths in R · Yan
+</title>
+
+    
+      <link rel="canonical" href="/posts/blog1/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.59.0" />
+  </head>
+
+  <body class=" ">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Yan
+    </a>
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/about/">About</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="/images/resume.pdf">Resume</a>
+          </li>
+        
+      
+      
+    </ul>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">How to Plot Maps and Paths in R</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='0001-01-01T00:00:00Z'>
+                October 19, 1019
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              3 minutes read
+            </span>
+          </div>
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+
+
+<div id="this-blog-is-mainly-about-how-to-plot-maps-and-paths-using-ggplot2-and-maps.-we-use-the-dataset-in-nasaweather-package-as-examples.-first-example-is-to-plot-the-world-map-and-the-paths-of-tropical-storms.-the-second-example-is-to-plot-the-us-map-and-the-path-of-tropical-storm-erin." class="section level3">
+<h3>This blog is mainly about how to plot maps and paths using “ggplot2” and “maps”. We use the dataset in nasaweather package as examples. First example is to plot the world map and the paths of tropical storms. The second example is to plot the US map and the path of tropical storm Erin.</h3>
+</div>
+<div id="the-packages-we-use-to-plot-the-map-are-maps-and-ggplot2.-to-process-the-data-we-use-package-calledtidyverse" class="section level3">
+<h3>The packages we use to plot the map are “maps” and ggplot2“. To process the data, we use package called”tidyverse"</h3>
+<pre class="r"><code>library(maps)
+library(ggplot2)
+library(tidyverse)</code></pre>
+</div>
+<div id="the-map-datas-are-contained-in-the-maps-package-and-we-can-use-function-map_data-to-get-them.-to-have-more-details-of-map_data-please-click-here.-the-head-of-world-map-data-and-us-map-data-are-showed-below." class="section level3">
+<h3>The map datas are contained in the maps package and we can use function map_data() to get them. To have more details of map_data(), please click <a href="https://www.rdocumentation.org/packages/ggplot2/versions/3.2.1/topics/map_data">here</a>. The head of world map data and US map data are showed below.</h3>
+<pre class="r"><code>world&lt;-map_data(&quot;world&quot;)
+us&lt;-map_data(&quot;state&quot;)
+head(world)</code></pre>
+<pre><code>##        long      lat group order region subregion
+## 1 -69.89912 12.45200     1     1  Aruba      &lt;NA&gt;
+## 2 -69.89571 12.42300     1     2  Aruba      &lt;NA&gt;
+## 3 -69.94219 12.43853     1     3  Aruba      &lt;NA&gt;
+## 4 -70.00415 12.50049     1     4  Aruba      &lt;NA&gt;
+## 5 -70.06612 12.54697     1     5  Aruba      &lt;NA&gt;
+## 6 -70.05088 12.59707     1     6  Aruba      &lt;NA&gt;</code></pre>
+<pre class="r"><code>head(us)</code></pre>
+<pre><code>##        long      lat group order  region subregion
+## 1 -87.46201 30.38968     1     1 alabama      &lt;NA&gt;
+## 2 -87.48493 30.37249     1     2 alabama      &lt;NA&gt;
+## 3 -87.52503 30.37249     1     3 alabama      &lt;NA&gt;
+## 4 -87.53076 30.33239     1     4 alabama      &lt;NA&gt;
+## 5 -87.57087 30.32665     1     5 alabama      &lt;NA&gt;
+## 6 -87.58806 30.32665     1     6 alabama      &lt;NA&gt;</code></pre>
+</div>
+<div id="world-map-plots" class="section level2">
+<h2>World Map Plots</h2>
+<div id="we-can-use-ggplotgeom_polygon-to-plot-the-world-map.-to-have-more-details-of-geom_polygon-please-click-here.-here-i-set-color-as-white-which-makes-the-bounders-white-and-set-fill-as-pink-which-makes-the-area-within-the-bounders-pink.-i-also-use-labs-to-add-the-title-and-change-the-name-of-axis.-the-outcome-is-called-plot1." class="section level3">
+<h3>We can use ggplot()+geom_polygon() to plot the world map. To have more details of geom_polygon(), please click <a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">here</a>. Here I set “color” as “white”, which makes the bounders white and set “fill” as “pink”, which makes the area within the bounders pink. I also use labs() to add the title and change the name of axis. The outcome is called plot1.</h3>
+<pre class="r"><code>plot1&lt;-ggplot() +
+  geom_polygon(data=world, aes(long, lat, group = group),fill = &quot;pink&quot;, color = &quot;white&quot;)+
+  labs(title=&quot;Plot1: The world map&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)
+plot1</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="now-on-the-map-we-using-data-from-the-nasaweather-packages-and-the-geom_path-function-to-add-the-path-of-tropical-storms-in-the-storms-data-table.here-i-use-guidescolorfalse-to-remove-the-legend-with-the-names-of-the-storms-because-there-are-so-many-storms-in-the-data-set.-if-i-show-the-legend-it-will-be-very-messy.-the-outcome-is-called-plot2." class="section level3">
+<h3>Now, on the map, we using data from the nasaweather packages and the geom_path() function to add the path of tropical storms in the storms data table.Here I use guides(color=FALSE) to remove the legend with the names of the storms because there are so many storms in the data set. If I show the legend, it will be very messy. The outcome is called plot2.</h3>
+<pre class="r"><code>plot2&lt;-plot1+
+  geom_path(data=nasaweather::storms,aes(x=long,y=lat,color=name))+
+  guides(color=FALSE)+
+  labs(title=&quot;Plot2: The paths of tropical storms on world map&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)+
+  coord_quickmap()
+plot2</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="it-is-obvious-that-the-paths-gather-at-a-specific-area-around-the-us.-we-can-change-the-range-of-x-axis-and-y-axis-to-have-a-closer-look.-the-outcome-is-called-plot3." class="section level3">
+<h3>It is obvious that the paths gather at a specific area around the US. We can change the range of x-axis and y-axis to have a closer look. The outcome is called plot3.</h3>
+<pre class="r"><code>plot3&lt;-plot2+
+xlim(-150,10)+
+  ylim(0,75)+
+  labs(title=&quot;Plot3: The paths of tropical \n storms in specific area&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)
+plot3</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="also-we-can-use-facet_wrap-to-plot-each-year-in-its-own-panel." class="section level3">
+<h3>Also, we can use +facet_wrap() to plot each year in its own panel.</h3>
+<pre class="r"><code>plot4&lt;-plot3+
+  facet_wrap(~year,ncol=3)+ 
+  labs(title=&quot;Plot4: The paths of tropical storms by years&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)
+plot4</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+<div id="us-plots" class="section level2">
+<h2>US Plots</h2>
+<div id="as-world-map-plots-we-use-the-same-function-to-plot-the-map-of-the-us." class="section level3">
+<h3>As world map plots, we use the same function to plot the map of the US.</h3>
+<pre class="r"><code>us&lt;-map_data(&quot;state&quot;)
+plot5&lt;-ggplot() +
+  geom_polygon(data=us, aes(long, lat, group = group),fill = &quot;pink&quot;, color = &quot;white&quot;)+
+  labs(title=&quot;Plot5: The US map&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)
+plot5</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="now-we-just-have-a-look-on-one-storm-erin-and-use-geom_path-to-plot-its-path." class="section level3">
+<h3>Now we just have a look on one storm “Erin”, and use geom_path to plot its path.</h3>
+<pre class="r"><code>Erin&lt;-nasaweather::storms%&gt;%filter(name==&quot;Erin&quot;)
+plot6&lt;-plot5+  
+  geom_path(data=Erin,aes(x=long,y=lat),size=2)+
+  labs(title=&quot;Plot6: The path of tropical storm Erin&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;)+
+  coord_quickmap()
+plot6</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="besides-that-we-can-color-the-path-of-the-storm-by-the-wind-speed-at-each-point" class="section level3">
+<h3>Besides that we can color the path of the storm by the wind speed at each point</h3>
+<pre class="r"><code>plot7&lt;-plot5+  
+  geom_path(data=Erin,aes(x=long,y=lat,color=wind),size=2)+
+  labs(title=&quot;Plot7: The path of tropical storm Erin&quot;,x=&quot;Longitude&quot;,y=&quot;Latitude&quot;,color=&quot;Wind speed (in knots)&quot;)+
+  coord_quickmap()
+plot7</code></pre>
+<p><img src="/posts/Blog1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+
+      </div>
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+     © 2019
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+       · 
+      [<a href="https://github.com/luizdepra/hugo-coder/tree/"></a>]
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+  </body>
+
+</html>
